@@ -9,10 +9,10 @@ pipeline {
     environment {
         SNAP_REPO = 'vprofile-snapshot'
         RELEASE_REPO = 'vprofile-release'
-        CENTRAL_REPO = 'vpro-maven-centrl'
-        NEXUSIP = '172.31.16.97'
+        CENTRAL_REPO = 'vpro-maven-centrl'           // ✅ correct value from Nexus
+        NEXUSIP = '172.31.16.97'                      // ✅ your internal Nexus IP
         NEXUSPORT = '8081'
-        NEXUS_GRP_REPO = 'vpro-maven-group'
+        NEXUS_GRP_REPO = 'vpro-maven-group'           // ✅ assuming group repo name
         NEXUS_USER = 'admin'
         NEXUS_PASS = 'admin123'
     }
@@ -20,12 +20,12 @@ pipeline {
     stages {
         stage('Prepare settings.xml') {
             steps {
-                script {
-                    sh '''
-                    echo "[INFO] Replacing environment variables in settings-template.xml"
+                echo '[INFO] Replacing environment variables in settings-template.xml'
+                sh '''
                     envsubst < settings-template.xml > settings.xml
-                    '''
-                }
+                    echo "Generated settings.xml:"
+                    cat settings.xml
+                '''
             }
         }
 
